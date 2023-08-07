@@ -1,15 +1,14 @@
-version: '3.9'
+version: "3.9"
 services:
-
   postgres:
     container_name: postgres
     image: postgres
     volumes:
       - pg-data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: 'user'
-      POSTGRES_PASSWORD: 'pass'
-      POSTGRES_DB: 'postgres'
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_DB}
     ports:
       - 5432:5432
 
@@ -25,8 +24,8 @@ services:
     container_name: app
     image: app
     environment:
-      PG_URL: 'postgres://user:pass@postgres:5432/postgres'
-      RMQ_URL: 'amqp://guest:guest@rabbitmq:5672/'
+      PG_URL: ${DATABASE_URL}
+      RMQ_URL: ${RMQ_URL}
     ports:
       - 8080:8080
     depends_on:

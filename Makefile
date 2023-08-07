@@ -34,7 +34,7 @@ run: swag-v1 ### swag run
 .PHONY: run
 
 docker-rm-volume: ### remove docker volume
-	docker volume rm go-clean-template_pg-data
+	docker volume rm webtruyen-go_pg-data
 .PHONY: docker-rm-volume
 
 linter-golangci: ### check by golangci linter
@@ -66,7 +66,7 @@ migrate-create:  ### create new migration
 .PHONY: migrate-create
 
 migrate-up: ### migration up
-	migrate -path migrations -database '$(PG_URL)?sslmode=disable' up
+	migrate -path migrations -database '$(DATABASE_URL)?sslmode=disable' up
 .PHONY: migrate-up
 
 bin-deps:
