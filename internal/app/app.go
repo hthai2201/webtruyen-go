@@ -9,16 +9,16 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/evrone/go-clean-template/config"
-	amqprpc "github.com/evrone/go-clean-template/internal/controller/amqp_rpc"
-	v1 "github.com/evrone/go-clean-template/internal/controller/http/v1"
-	"github.com/evrone/go-clean-template/internal/usecase"
-	"github.com/evrone/go-clean-template/internal/usecase/repo"
-	"github.com/evrone/go-clean-template/internal/usecase/webapi"
-	"github.com/evrone/go-clean-template/pkg/httpserver"
-	"github.com/evrone/go-clean-template/pkg/logger"
-	"github.com/evrone/go-clean-template/pkg/postgres"
-	"github.com/evrone/go-clean-template/pkg/rabbitmq/rmq_rpc/server"
+	"github.com/hthai2201/webtruyen-go/config"
+	amqprpc "github.com/hthai2201/webtruyen-go/internal/controller/amqp_rpc"
+	v1 "github.com/hthai2201/webtruyen-go/internal/controller/http/v1"
+	"github.com/hthai2201/webtruyen-go/internal/usecase"
+	"github.com/hthai2201/webtruyen-go/internal/usecase/repo"
+	"github.com/hthai2201/webtruyen-go/internal/usecase/webapi"
+	"github.com/hthai2201/webtruyen-go/pkg/httpserver"
+	"github.com/hthai2201/webtruyen-go/pkg/logger"
+	"github.com/hthai2201/webtruyen-go/pkg/postgres"
+	"github.com/hthai2201/webtruyen-go/pkg/rabbitmq/rmq_rpc/server"
 )
 
 // Run creates objects via constructors.

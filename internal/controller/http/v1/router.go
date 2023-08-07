@@ -10,9 +10,9 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 
 	// Swagger docs.
-	_ "github.com/evrone/go-clean-template/docs"
-	"github.com/evrone/go-clean-template/internal/usecase"
-	"github.com/evrone/go-clean-template/pkg/logger"
+	_ "github.com/hthai2201/webtruyen-go/docs"
+	"github.com/hthai2201/webtruyen-go/internal/usecase"
+	"github.com/hthai2201/webtruyen-go/pkg/logger"
 )
 
 // NewRouter -.
@@ -26,8 +26,6 @@ func NewRouter(handler *gin.Engine, l logger.Interface, t usecase.Translation) {
 	// Options
 	handler.Use(gin.Logger())
 	handler.Use(gin.Recovery())
-
-	// Swagger
 	swaggerHandler := ginSwagger.DisablingWrapHandler(swaggerFiles.Handler, "DISABLE_SWAGGER_HTTP_HANDLER")
 	handler.GET("/swagger/*any", swaggerHandler)
 

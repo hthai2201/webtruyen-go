@@ -1,17 +1,17 @@
 app:
-  name: 'go-clean-template'
-  version: '1.0.0'
+  name: "webtruyen-go"
+  version: "1.0.0"
 
 http:
-  port: '8080'
+  port: "8080"
 
 logger:
-  log_level: 'debug'
-  rollbar_env: 'go-clean-template'
+  log_level: "debug"
+  rollbar_env: "webtruyen-go"
 
 postgres:
   pool_max: 2
 
 rabbitmq:
-  rpc_server_exchange: 'rpc_server'
-  rpc_client_exchange: 'rpc_client'
+  rpc_server_exchange: "rpc_server"
+  rpc_client_exchange: "rpc_client"
