@@ -8,6 +8,8 @@ import (
 	"syscall"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 
 	"github.com/hthai2201/webtruyen-go/config"
 	amqprpc "github.com/hthai2201/webtruyen-go/internal/controller/amqp_rpc"
@@ -15,9 +17,9 @@ import (
 	"github.com/hthai2201/webtruyen-go/internal/usecase"
 	"github.com/hthai2201/webtruyen-go/internal/usecase/repo"
 	"github.com/hthai2201/webtruyen-go/internal/usecase/webapi"
+	"github.com/hthai2201/webtruyen-go/pkg/appctx"
 	"github.com/hthai2201/webtruyen-go/pkg/httpserver"
 	"github.com/hthai2201/webtruyen-go/pkg/logger"
-	"github.com/hthai2201/webtruyen-go/pkg/postgres"
 	"github.com/hthai2201/webtruyen-go/pkg/rabbitmq/rmq_rpc/server"
 )
 
@@ -26,15 +28,21 @@ func Run(cfg *config.Config) {
 	l := logger.New(cfg.Log.Level)
 
 	// Repository
-	pg, err := postgres.New(cfg.PG.URL, postgres.MaxPoolSize(cfg.PG.PoolMax))
+	dbUrl := os.Getenv("DATABASE_URL")
+	fmt.Println(dbUrl)
+	db, err := gorm.Open(postgres.Open(dbUrl), &gorm.Config{})
+	appCtx := appctx.NewAppContext(db.Debug())
 	if err != nil {
 		l.Fatal(fmt.Errorf("app - Run - postgres.New: %w", err))
 	}
-	defer pg.Close()
+	defer func() {
+		dbInstance, _ := db.DB()
+		_ = dbInstance.Close()
+	}()
 
 	// Use case
 	translationUseCase := usecase.New(
-		repo.New(pg),
+		repo.New(appCtx),
 		webapi.New(),
 	)
 

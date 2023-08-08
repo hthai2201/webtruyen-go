@@ -9,3 +9,7 @@ type Translation struct {
 	Original    string `json:"original"     example:"текст для перевода"`
 	Translation string `json:"translation"  example:"text for translation"`
 }
+
+func (Translation) GetTableName() string {
+	return "history"
+}
