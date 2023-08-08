@@ -14,9 +14,7 @@ import (
 	"github.com/hthai2201/webtruyen-go/config"
 	amqprpc "github.com/hthai2201/webtruyen-go/internal/controller/amqp_rpc"
 	v1 "github.com/hthai2201/webtruyen-go/internal/controller/http/v1"
-	"github.com/hthai2201/webtruyen-go/internal/usecase"
-	"github.com/hthai2201/webtruyen-go/internal/usecase/repo"
-	"github.com/hthai2201/webtruyen-go/internal/usecase/webapi"
+	"github.com/hthai2201/webtruyen-go/internal/usecases"
 	"github.com/hthai2201/webtruyen-go/pkg/appctx"
 	"github.com/hthai2201/webtruyen-go/pkg/httpserver"
 	"github.com/hthai2201/webtruyen-go/pkg/logger"
@@ -40,14 +38,11 @@ func Run(cfg *config.Config) {
 		_ = dbInstance.Close()
 	}()
 
-	// Use case
-	translationUseCase := usecase.New(
-		repo.New(appCtx),
-		webapi.New(),
-	)
+	//usecases
+	allUsecases := usecases.New(appCtx)
 
 	// RabbitMQ RPC Server
-	rmqRouter := amqprpc.NewRouter(translationUseCase)
+	rmqRouter := amqprpc.NewRouter(allUsecases)
 
 	rmqServer, err := server.New(cfg.RMQ.URL, cfg.RMQ.ServerExchange, rmqRouter, l)
 	if err != nil {
@@ -56,7 +51,7 @@ func Run(cfg *config.Config) {
 
 	// HTTP Server
 	handler := gin.New()
-	v1.NewRouter(handler, l, translationUseCase)
+	v1.NewRouter(handler, l, allUsecases)
 	httpServer := httpserver.New(handler, httpserver.Port(cfg.HTTP.Port))
 
 	// Waiting signal

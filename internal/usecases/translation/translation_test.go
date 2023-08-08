@@ -1,4 +1,4 @@
-package usecase_test
+package translationusecase_test
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/hthai2201/webtruyen-go/internal/entity"
-	"github.com/hthai2201/webtruyen-go/internal/usecase"
+	translationusecase "github.com/hthai2201/webtruyen-go/internal/usecases/translation"
 )
 
 var errInternalServErr = errors.New("internal server error")
@@ -21,7 +21,7 @@ type test struct {
 	err  error
 }
 
-func translation(t *testing.T) (*usecase.TranslationUseCase, *MockTranslationRepo, *MockTranslationWebAPI) {
+func translation(t *testing.T) (*translationusecase.TranslationUseCase, *MockTranslationRepo, *MockTranslationWebAPI) {
 	t.Helper()
 
 	mockCtl := gomock.NewController(t)
@@ -30,7 +30,7 @@ func translation(t *testing.T) (*usecase.TranslationUseCase, *MockTranslationRep
 	repo := NewMockTranslationRepo(mockCtl)
 	webAPI := NewMockTranslationWebAPI(mockCtl)
 
-	translation := usecase.New(repo, webAPI)
+	translation := translationusecase.New(repo, webAPI)
 
 	return translation, repo, webAPI
 }

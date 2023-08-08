@@ -11,7 +11,7 @@ import (
 
 	// Swagger docs.
 	_ "github.com/hthai2201/webtruyen-go/docs"
-	"github.com/hthai2201/webtruyen-go/internal/usecase"
+	"github.com/hthai2201/webtruyen-go/internal/usecases"
 	"github.com/hthai2201/webtruyen-go/pkg/logger"
 )
 
@@ -22,7 +22,8 @@ import (
 // @version     1.0
 // @host        localhost:8080
 // @BasePath    /v1
-func NewRouter(handler *gin.Engine, l logger.Interface, t usecase.Translation) {
+func NewRouter(handler *gin.Engine, l logger.Interface, t *usecases.Usecases) {
+
 	// Options
 	handler.Use(gin.Logger())
 	handler.Use(gin.Recovery())
@@ -38,6 +39,6 @@ func NewRouter(handler *gin.Engine, l logger.Interface, t usecase.Translation) {
 	// Routers
 	h := handler.Group("/v1")
 	{
-		newTranslationRoutes(h, t, l)
+		newTranslationRoutes(h, t.Translation, l)
 	}
 }
