@@ -6,16 +6,16 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/hthai2201/webtruyen-go/internal/entity"
-	"github.com/hthai2201/webtruyen-go/internal/usecase"
+	translationusecase "github.com/hthai2201/webtruyen-go/internal/usecases/translation"
 	"github.com/hthai2201/webtruyen-go/pkg/logger"
 )
 
 type translationRoutes struct {
-	t usecase.Translation
+	t translationusecase.Translation
 	l logger.Interface
 }
 
-func newTranslationRoutes(handler *gin.RouterGroup, t usecase.Translation, l logger.Interface) {
+func newTranslationRoutes(handler *gin.RouterGroup, t translationusecase.Translation, l logger.Interface) {
 	r := &translationRoutes{t, l}
 
 	h := handler.Group("/translation")

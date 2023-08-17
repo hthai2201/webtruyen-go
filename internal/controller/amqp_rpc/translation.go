@@ -7,15 +7,15 @@ import (
 	"github.com/streadway/amqp"
 
 	"github.com/hthai2201/webtruyen-go/internal/entity"
-	"github.com/hthai2201/webtruyen-go/internal/usecase"
+	translationusecase "github.com/hthai2201/webtruyen-go/internal/usecases/translation"
 	"github.com/hthai2201/webtruyen-go/pkg/rabbitmq/rmq_rpc/server"
 )
 
 type translationRoutes struct {
-	translationUseCase usecase.Translation
+	translationUseCase translationusecase.Translation
 }
 
-func newTranslationRoutes(routes map[string]server.CallHandler, t usecase.Translation) {
+func newTranslationRoutes(routes map[string]server.CallHandler, t translationusecase.Translation) {
 	r := &translationRoutes{t}
 	{
 		routes["getHistory"] = r.getHistory()
