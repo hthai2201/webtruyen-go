@@ -40,5 +40,6 @@ func NewRouter(handler *gin.Engine, l logger.Interface, t *usecases.Usecases) {
 	h := handler.Group("/v1")
 	{
 		newTranslationRoutes(h, t.Translation, l)
+		newCrawlerRoutes(h, t.Crawler, l)
 	}
 }
