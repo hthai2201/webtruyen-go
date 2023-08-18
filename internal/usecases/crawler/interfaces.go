@@ -11,10 +11,6 @@ type (
 	// Crawler -.
 	Crawler interface {
 		CrawlStory(ctx context.Context, url string) (entity.Story, error)
-		CrawlStoryRate(context.Context) (entity.StoryRate, error)
-		CrawlStoryList(context.Context) (entity.StoryList, error)
-		CrawlCategory(context.Context) (entity.Category, error)
-		CrawlChapter(context.Context) (entity.Chapter, error)
 	}
 
 	// CrawlerRepo -.
@@ -24,5 +20,6 @@ type (
 		StoreStoryList(context.Context, entity.StoryList) error
 		StoreCategory(context.Context, entity.Category) error
 		StoreChapter(context.Context, entity.Chapter) error
+		StoreAuthor(context.Context, entity.Author) error
 	}
 )

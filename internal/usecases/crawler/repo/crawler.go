@@ -83,3 +83,15 @@ func (r *CrawlerRepo) StoreChapter(ctx context.Context, t entity.Chapter) error 
 
 	return nil
 }
+func (r *CrawlerRepo) StoreAuthor(ctx context.Context, t entity.Author) error {
+	db := r.appCtx.GetDBConnection()
+	result := db.Table(entity.Author{}.GetTableName()).Clauses(clause.OnConflict{
+		UpdateAll: true,
+	}).Create(t)
+
+	if result.Error != nil {
+		return fmt.Errorf("CrawlerRepo - StoreAuthor - r.Pool.Exec: %w", result.Error)
+	}
+
+	return nil
+}
