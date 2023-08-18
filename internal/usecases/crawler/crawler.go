@@ -32,6 +32,7 @@ func (uc *CrawlerUseCase) CrawlStory(ctx context.Context, url string) (entity.St
 	wg.Add(1)
 	c := colly.NewCollector()
 	c.OnHTML(".col-truyen-main", func(e *colly.HTMLElement) {
+		resultStory.TID = e.ChildAttr(".col-truyen-main #truyen-id", "value")
 		resultStory.Name = e.ChildText(".col-truyen-main h3.title")
 		resultStory.Thumbnail = e.ChildAttr(".col-truyen-main .book img", "src")
 		resultStory.Author.Name = e.ChildText(".col-truyen-main [itemprop='author']")

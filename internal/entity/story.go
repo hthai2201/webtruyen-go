@@ -11,6 +11,7 @@ import (
 // Translation -.
 type Story struct {
 	common.Model
+	TID         string     `json:"tid" gorm:"column:tid;uniqueIndex"`
 	Slug        string     `json:"slug" gorm:"column:slug;uniqueIndex"`
 	Name        string     `json:"name" gorm:"column:name"`
 	Thumbnail   string     `json:"thumbnail" gorm:"column:thumbnail"`
@@ -29,7 +30,7 @@ func (Story) TableName() string {
 
 func (e *Story) BeforeCreate(tx *gorm.DB) (err error) {
 	tx.Statement.AddClause(clause.OnConflict{
-		Columns:   []clause.Column{{Name: "slug"}},
+		Columns:   []clause.Column{{Name: "slug"}, {Name: "tid"}},
 		UpdateAll: true,
 	})
 	return nil
