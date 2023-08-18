@@ -5,12 +5,14 @@ import (
 	"context"
 
 	"github.com/hthai2201/webtruyen-go/internal/entity"
+	truyenfullwebapi "github.com/hthai2201/webtruyen-go/internal/usecases/crawler/webapi"
 )
 
 type (
 	// Crawler -.
 	Crawler interface {
 		CrawlStory(ctx context.Context, url string) (entity.Story, error)
+		CrawlChapters(ctx context.Context, url string) ([]entity.Chapter, error)
 	}
 
 	// CrawlerRepo -.
@@ -21,5 +23,9 @@ type (
 		StoreCategory(context.Context, *entity.Category) error
 		StoreChapter(context.Context, *entity.Chapter) error
 		StoreAuthor(context.Context, *entity.Author) error
+		FindStory(context.Context, entity.Story, *entity.Story) error
+	}
+	TruyenFullWebAPI interface {
+		GetStoryChapters(story entity.Story, opt map[string]string) (truyenfullwebapi.GetStoryChaptersResponse, error)
 	}
 )

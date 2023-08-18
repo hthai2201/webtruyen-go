@@ -90,3 +90,12 @@ func (r *CrawlerRepo) StoreAuthor(ctx context.Context, t *entity.Author) error {
 
 	return nil
 }
+func (r *CrawlerRepo) FindStory(ctx context.Context, f entity.Story, t *entity.Story) error {
+	db := r.appCtx.GetDBConnection()
+	result := db.Table(entity.Story{}.TableName()).Where(f).First(t)
+	if result.Error != nil {
+		return fmt.Errorf("CrawlerRepo - FindStory - r.Pool.Exec: %w", result.Error)
+	}
+
+	return nil
+}

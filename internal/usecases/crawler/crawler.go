@@ -3,6 +3,7 @@ package crawlerusecase
 import (
 	"context"
 	"fmt"
+	"log"
 	"strconv"
 	"sync"
 
@@ -13,13 +14,15 @@ import (
 
 // CrawlerUseCase -.
 type CrawlerUseCase struct {
-	repo CrawlerRepo
+	repo   CrawlerRepo
+	webAPI TruyenFullWebAPI
 }
 
 // New -.
-func New(r CrawlerRepo) *CrawlerUseCase {
+func New(r CrawlerRepo, w TruyenFullWebAPI) *CrawlerUseCase {
 	return &CrawlerUseCase{
-		repo: r,
+		repo:   r,
+		webAPI: w,
 	}
 }
 
@@ -76,4 +79,24 @@ func (uc *CrawlerUseCase) CrawlStory(ctx context.Context, url string) (entity.St
 	wg.Wait()
 	uc.repo.StoreStory(ctx, &resultStory)
 	return resultStory, nil
+}
+func (uc *CrawlerUseCase) CrawlChapters(ctx context.Context, url string) ([]entity.Chapter, error) {
+	story := entity.Story{
+		Slug: common.GetLastSlashValue(url),
+	}
+	err := uc.repo.FindStory(ctx, story, &story)
+	if err != nil {
+		story, err = uc.CrawlStory(ctx, url)
+		if err != nil {
+			return nil, fmt.Errorf("CrawlerUseCase - CrawlChapters - s.repo.FindStory: %w", err)
+
+		}
+	}
+	rawHTMLChapters, err := uc.webAPI.GetStoryChapters(story, map[string]string{
+		"page":   "1",
+		"totalp": "1",
+	})
+	log.Println(rawHTMLChapters)
+	chapters := []entity.Chapter{}
+	return chapters, nil
 }

@@ -20,6 +20,7 @@ func newCrawlerRoutes(handler *gin.RouterGroup, t crawlerusecase.Crawler, l logg
 	h := handler.Group("/crawler")
 	{
 		h.POST("/crawl-story", r.crawlStory)
+		h.POST("/crawl-chapters", r.crawlChapters)
 	}
 }
 
@@ -47,4 +48,33 @@ func (r *crawlerRoutes) crawlStory(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, crawler)
+}
+
+type CrawlChaptersRequest struct {
+	URL string `json:"url"       binding:"required"  example:"https://truyenfull.vn/tu-cam-270192"`
+}
+
+func (r *crawlerRoutes) crawlChapters(c *gin.Context) {
+	var request CrawlChaptersRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
+		r.l.Error(err, "http - v1 - CrawlChapters")
+		errorResponse(c, http.StatusBadRequest, "invalid request body")
+
+		return
+	}
+
+	chapters, err := r.t.CrawlChapters(
+		c.Request.Context(), request.URL,
+	)
+	if err != nil {
+		r.l.Error(err, "http - v1 - CrawlChapters")
+		errorResponse(c, http.StatusInternalServerError, "crawler service problems")
+
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"total":           len(chapters),
+		"newest_chapters": chapters[:10],
+	})
 }
