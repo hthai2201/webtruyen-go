@@ -15,11 +15,11 @@ type (
 
 	// CrawlerRepo -.
 	CrawlerRepo interface {
-		StoreStory(context.Context, entity.Story) error
-		StoreStoryRate(context.Context, entity.StoryRate) error
-		StoreStoryList(context.Context, entity.StoryList) error
-		StoreCategory(context.Context, entity.Category) error
-		StoreChapter(context.Context, entity.Chapter) error
-		StoreAuthor(context.Context, entity.Author) error
+		StoreStory(context.Context, *entity.Story) error
+		StoreStoryRate(context.Context, *entity.StoryRate) error
+		StoreStoryList(context.Context, *entity.StoryList) error
+		StoreCategory(context.Context, *entity.Category) error
+		StoreChapter(context.Context, *entity.Chapter) error
+		StoreAuthor(context.Context, *entity.Author) error
 	}
 )

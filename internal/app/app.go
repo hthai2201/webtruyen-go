@@ -14,6 +14,7 @@ import (
 	"github.com/hthai2201/webtruyen-go/config"
 	amqprpc "github.com/hthai2201/webtruyen-go/internal/controller/amqp_rpc"
 	v1 "github.com/hthai2201/webtruyen-go/internal/controller/http/v1"
+	"github.com/hthai2201/webtruyen-go/internal/entity"
 	"github.com/hthai2201/webtruyen-go/internal/usecases"
 	"github.com/hthai2201/webtruyen-go/pkg/appctx"
 	"github.com/hthai2201/webtruyen-go/pkg/httpserver"
@@ -33,6 +34,8 @@ func Run(cfg *config.Config) {
 	if err != nil {
 		l.Fatal(fmt.Errorf("app - Run - postgres.New: %w", err))
 	}
+	db.AutoMigrate(&entity.Author{}, &entity.Category{}, &entity.Chapter{}, &entity.Story{}, &entity.StoryList{}, &entity.StoryRate{}, &entity.Translation{})
+
 	defer func() {
 		dbInstance, _ := db.DB()
 		_ = dbInstance.Close()

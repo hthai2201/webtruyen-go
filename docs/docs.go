@@ -98,9 +98,15 @@ const docTemplate = `{
         "entity.Translation": {
             "type": "object",
             "properties": {
+                "created_at": {
+                    "type": "string"
+                },
                 "destination": {
                     "type": "string",
                     "example": "en"
+                },
+                "id": {
+                    "type": "integer"
                 },
                 "original": {
                     "type": "string",
@@ -113,6 +119,9 @@ const docTemplate = `{
                 "translation": {
                     "type": "string",
                     "example": "text for translation"
+                },
+                "updated_at": {
+                    "type": "string"
                 }
             }
         },

@@ -23,7 +23,7 @@ func New(r CrawlerRepo) *CrawlerUseCase {
 	}
 }
 
-func (*CrawlerUseCase) CrawlStory(ctx context.Context, url string) (entity.Story, error) {
+func (uc *CrawlerUseCase) CrawlStory(ctx context.Context, url string) (entity.Story, error) {
 	resultStory := entity.Story{}
 	// slug
 	resultStory.Slug = common.GetLastSlashValue(url)
@@ -39,7 +39,7 @@ func (*CrawlerUseCase) CrawlStory(ctx context.Context, url string) (entity.Story
 
 		e.ForEach(".col-truyen-main a[itemprop='genre']", func(i int, a *colly.HTMLElement) {
 			c := entity.Category{
-				Slug: a.Attr("href"),
+				Slug: common.GetLastSlashValue(a.Attr("href")),
 				Name: a.Text,
 			}
 			resultStory.Categories = append(resultStory.Categories, c)
@@ -73,5 +73,6 @@ func (*CrawlerUseCase) CrawlStory(ctx context.Context, url string) (entity.Story
 
 	c.Visit(url)
 	wg.Wait()
+	uc.repo.StoreStory(ctx, &resultStory)
 	return resultStory, nil
 }

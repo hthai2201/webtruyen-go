@@ -13,5 +13,5 @@ func NewAppContext(db *gorm.DB) *AppContext {
 }
 
 func (ctx *AppContext) GetDBConnection() *gorm.DB {
-	return ctx.db.Session(&gorm.Session{})
+	return ctx.db.Session(&gorm.Session{FullSaveAssociations: true})
 }

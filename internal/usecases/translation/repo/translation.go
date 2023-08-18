@@ -24,7 +24,7 @@ func New(appCtx *appctx.AppContext) *TranslationRepo {
 func (r *TranslationRepo) GetHistory(ctx context.Context) ([]entity.Translation, error) {
 	db := r.appCtx.GetDBConnection()
 	var history []entity.Translation
-	result := db.Table(entity.Translation{}.GetTableName()).Find(&history)
+	result := db.Table(entity.Translation{}.TableName()).Find(&history)
 
 	if result.Error != nil {
 		return nil, fmt.Errorf("TranslationRepo - GetHistory - r.Pool.Query: %w", result.Error)
@@ -36,7 +36,7 @@ func (r *TranslationRepo) GetHistory(ctx context.Context) ([]entity.Translation,
 // Store -.
 func (r *TranslationRepo) Store(ctx context.Context, t entity.Translation) error {
 	db := r.appCtx.GetDBConnection()
-	result := db.Table(entity.Translation{}.GetTableName()).Create(t)
+	result := db.Table(entity.Translation{}.TableName()).Create(t)
 
 	if result.Error != nil {
 		return fmt.Errorf("TranslationRepo - Store - r.Pool.Exec: %w", result.Error)

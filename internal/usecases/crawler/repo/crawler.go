@@ -22,11 +22,9 @@ func New(appCtx *appctx.AppContext) *CrawlerRepo {
 }
 
 // Store -.
-func (r *CrawlerRepo) StoreStory(ctx context.Context, t entity.Story) error {
+func (r *CrawlerRepo) StoreStory(ctx context.Context, t *entity.Story) error {
 	db := r.appCtx.GetDBConnection()
-	result := db.Table(entity.Story{}.GetTableName()).Clauses(clause.OnConflict{
-		UpdateAll: true,
-	}).Create(t)
+	result := db.Table(entity.Story{}.TableName()).Create(t)
 
 	if result.Error != nil {
 		return fmt.Errorf("CrawlerRepo - StoreStory - r.Pool.Exec: %w", result.Error)
@@ -35,9 +33,9 @@ func (r *CrawlerRepo) StoreStory(ctx context.Context, t entity.Story) error {
 	return nil
 }
 
-func (r *CrawlerRepo) StoreCategory(ctx context.Context, t entity.Category) error {
+func (r *CrawlerRepo) StoreCategory(ctx context.Context, t *entity.Category) error {
 	db := r.appCtx.GetDBConnection()
-	result := db.Table(entity.Category{}.GetTableName()).Clauses(clause.OnConflict{
+	result := db.Table(entity.Category{}.TableName()).Clauses(clause.OnConflict{
 		UpdateAll: true,
 	}).Create(t)
 
@@ -47,9 +45,9 @@ func (r *CrawlerRepo) StoreCategory(ctx context.Context, t entity.Category) erro
 
 	return nil
 }
-func (r *CrawlerRepo) StoreStoryList(ctx context.Context, t entity.StoryList) error {
+func (r *CrawlerRepo) StoreStoryList(ctx context.Context, t *entity.StoryList) error {
 	db := r.appCtx.GetDBConnection()
-	result := db.Table(entity.StoryList{}.GetTableName()).Clauses(clause.OnConflict{
+	result := db.Table(entity.StoryList{}.TableName()).Clauses(clause.OnConflict{
 		UpdateAll: true,
 	}).Create(t)
 
@@ -59,9 +57,9 @@ func (r *CrawlerRepo) StoreStoryList(ctx context.Context, t entity.StoryList) er
 
 	return nil
 }
-func (r *CrawlerRepo) StoreStoryRate(ctx context.Context, t entity.StoryRate) error {
+func (r *CrawlerRepo) StoreStoryRate(ctx context.Context, t *entity.StoryRate) error {
 	db := r.appCtx.GetDBConnection()
-	result := db.Table(entity.StoryRate{}.GetTableName()).Clauses(clause.OnConflict{
+	result := db.Table(entity.StoryRate{}.TableName()).Clauses(clause.OnConflict{
 		UpdateAll: true,
 	}).Create(t)
 
@@ -71,9 +69,9 @@ func (r *CrawlerRepo) StoreStoryRate(ctx context.Context, t entity.StoryRate) er
 
 	return nil
 }
-func (r *CrawlerRepo) StoreChapter(ctx context.Context, t entity.Chapter) error {
+func (r *CrawlerRepo) StoreChapter(ctx context.Context, t *entity.Chapter) error {
 	db := r.appCtx.GetDBConnection()
-	result := db.Table(entity.Chapter{}.GetTableName()).Clauses(clause.OnConflict{
+	result := db.Table(entity.Chapter{}.TableName()).Clauses(clause.OnConflict{
 		UpdateAll: true,
 	}).Create(t)
 
@@ -83,12 +81,9 @@ func (r *CrawlerRepo) StoreChapter(ctx context.Context, t entity.Chapter) error 
 
 	return nil
 }
-func (r *CrawlerRepo) StoreAuthor(ctx context.Context, t entity.Author) error {
+func (r *CrawlerRepo) StoreAuthor(ctx context.Context, t *entity.Author) error {
 	db := r.appCtx.GetDBConnection()
-	result := db.Table(entity.Author{}.GetTableName()).Clauses(clause.OnConflict{
-		UpdateAll: true,
-	}).Create(t)
-
+	result := db.Table(entity.Author{}.TableName()).Create(t)
 	if result.Error != nil {
 		return fmt.Errorf("CrawlerRepo - StoreAuthor - r.Pool.Exec: %w", result.Error)
 	}

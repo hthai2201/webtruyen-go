@@ -2,9 +2,13 @@ basePath: /v1
 definitions:
   entity.Translation:
     properties:
+      created_at:
+        type: string
       destination:
         example: en
         type: string
+      id:
+        type: integer
       original:
         example: текст для перевода
         type: string
@@ -13,6 +17,8 @@ definitions:
         type: string
       translation:
         example: text for translation
+        type: string
+      updated_at:
         type: string
     type: object
   v1.doTranslateRequest:
