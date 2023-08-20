@@ -1,5 +1,106 @@
 basePath: /v1
 definitions:
+  entity.Author:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      slug:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  entity.Category:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      slug:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  entity.Chapter:
+    properties:
+      cid:
+        type: string
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      slug:
+        type: string
+      story_id:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  entity.Story:
+    properties:
+      author:
+        $ref: '#/definitions/entity.Author'
+      author_id:
+        type: integer
+      categories:
+        items:
+          $ref: '#/definitions/entity.Category'
+        type: array
+      chapters:
+        items:
+          $ref: '#/definitions/entity.Chapter'
+        type: array
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      rate:
+        $ref: '#/definitions/entity.StoryRate'
+      slug:
+        type: string
+      source:
+        type: string
+      status:
+        type: string
+      thumbnail:
+        type: string
+      tid:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  entity.StoryRate:
+    properties:
+      best_value:
+        type: number
+      count:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+      story_id:
+        type: integer
+      updated_at:
+        type: string
+      value:
+        type: number
+    type: object
   entity.Translation:
     properties:
       created_at:
@@ -20,6 +121,29 @@ definitions:
         type: string
       updated_at:
         type: string
+    type: object
+  v1.CrawlChaptersRequest:
+    properties:
+      url:
+        example: https://truyenfull.vn/tu-cam-270192
+        type: string
+    required:
+    - url
+    type: object
+  v1.CrawlChaptersResponse:
+    type: object
+  v1.crawlStoryRequest:
+    properties:
+      url:
+        example: https://truyenfull.vn/tu-cam-270192
+        type: string
+    required:
+    - url
+    type: object
+  v1.crawlStoryResponse:
+    properties:
+      story:
+        $ref: '#/definitions/entity.Story'
     type: object
   v1.doTranslateRequest:
     properties:
@@ -50,13 +174,75 @@ definitions:
         example: message
         type: string
     type: object
-host: localhost:8080
+host: localhost:8000
 info:
   contact: {}
   description: Using a translation service as an example
   title: Go Clean Template API
   version: "1.0"
 paths:
+  /crawler/crawl-chapters:
+    post:
+      consumes:
+      - application/json
+      description: Crawl chapters from a URL
+      operationId: crawl-chapters
+      parameters:
+      - description: Crawl chapters request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/v1.CrawlChaptersRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.CrawlChaptersResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Crawl Chapters
+      tags:
+      - crawler
+  /crawler/crawl-story:
+    post:
+      consumes:
+      - application/json
+      description: Crawl a story from a URL
+      operationId: crawl-story
+      parameters:
+      - description: Crawl story request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/v1.crawlStoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.crawlStoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Crawl Story
+      tags:
+      - crawler
   /translation/do-translate:
     post:
       consumes:

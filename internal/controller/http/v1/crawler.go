@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/hthai2201/webtruyen-go/internal/entity"
 	crawlerusecase "github.com/hthai2201/webtruyen-go/internal/usecases/crawler"
 	"github.com/hthai2201/webtruyen-go/pkg/logger"
 )
@@ -27,7 +28,21 @@ func newCrawlerRoutes(handler *gin.RouterGroup, t crawlerusecase.Crawler, l logg
 type crawlStoryRequest struct {
 	URL string `json:"url"       binding:"required"  example:"https://truyenfull.vn/tu-cam-270192"`
 }
+type crawlStoryResponse struct {
+	Story entity.Story `json:"story"`
+}
 
+// @Summary     Crawl Story
+// @Description Crawl a story from a URL
+// @ID          crawl-story
+// @Tags        crawler
+// @Accept      json
+// @Produce     json
+// @Param       request body crawlStoryRequest true "Crawl story request"
+// @Success     200 {object} crawlStoryResponse
+// @Failure     400 {object} response
+// @Failure     500 {object} response
+// @Router      /crawler/crawl-story [post]
 func (r *crawlerRoutes) crawlStory(c *gin.Context) {
 	var request crawlStoryRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -37,7 +52,7 @@ func (r *crawlerRoutes) crawlStory(c *gin.Context) {
 		return
 	}
 
-	crawler, err := r.t.CrawlStory(
+	story, err := r.t.CrawlStory(
 		c.Request.Context(), request.URL,
 	)
 	if err != nil {
@@ -47,13 +62,28 @@ func (r *crawlerRoutes) crawlStory(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, crawler)
+	c.JSON(http.StatusOK, crawlStoryResponse{Story: story})
 }
 
 type CrawlChaptersRequest struct {
 	URL string `json:"url"       binding:"required"  example:"https://truyenfull.vn/tu-cam-270192"`
 }
+type CrawlChaptersResponse struct {
+	total           int
+	newest_chapters []entity.Chapter
+}
 
+// @Summary     Crawl Chapters
+// @Description Crawl chapters from a URL
+// @ID          crawl-chapters
+// @Tags        crawler
+// @Accept      json
+// @Produce     json
+// @Param       request body CrawlChaptersRequest true "Crawl chapters request"
+// @Success     200 {object} CrawlChaptersResponse
+// @Failure     400 {object} response
+// @Failure     500 {object} response
+// @Router      /crawler/crawl-chapters [post]
 func (r *crawlerRoutes) crawlChapters(c *gin.Context) {
 	var request CrawlChaptersRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -73,8 +103,8 @@ func (r *crawlerRoutes) crawlChapters(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"total":           len(chapters),
-		"newest_chapters": chapters,
+	c.JSON(http.StatusOK, CrawlChaptersResponse{
+		total:           len(chapters),
+		newest_chapters: chapters,
 	})
 }

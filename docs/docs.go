@@ -16,6 +16,100 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/crawler/crawl-chapters": {
+            "post": {
+                "description": "Crawl chapters from a URL",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "crawler"
+                ],
+                "summary": "Crawl Chapters",
+                "operationId": "crawl-chapters",
+                "parameters": [
+                    {
+                        "description": "Crawl chapters request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.CrawlChaptersRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.CrawlChaptersResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    }
+                }
+            }
+        },
+        "/crawler/crawl-story": {
+            "post": {
+                "description": "Crawl a story from a URL",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "crawler"
+                ],
+                "summary": "Crawl Story",
+                "operationId": "crawl-story",
+                "parameters": [
+                    {
+                        "description": "Crawl story request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.crawlStoryRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.crawlStoryResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    }
+                }
+            }
+        },
         "/translation/do-translate": {
             "post": {
                 "description": "Translate a text",
@@ -95,6 +189,160 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "entity.Author": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Category": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Chapter": {
+            "type": "object",
+            "properties": {
+                "cid": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "story_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Story": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "$ref": "#/definitions/entity.Author"
+                },
+                "author_id": {
+                    "type": "integer"
+                },
+                "categories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Category"
+                    }
+                },
+                "chapters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Chapter"
+                    }
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "rate": {
+                    "$ref": "#/definitions/entity.StoryRate"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "thumbnail": {
+                    "type": "string"
+                },
+                "tid": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.StoryRate": {
+            "type": "object",
+            "properties": {
+                "best_value": {
+                    "type": "number"
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "story_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "number"
+                }
+            }
+        },
         "entity.Translation": {
             "type": "object",
             "properties": {
@@ -122,6 +370,41 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "type": "string"
+                }
+            }
+        },
+        "v1.CrawlChaptersRequest": {
+            "type": "object",
+            "required": [
+                "url"
+            ],
+            "properties": {
+                "url": {
+                    "type": "string",
+                    "example": "https://truyenfull.vn/tu-cam-270192"
+                }
+            }
+        },
+        "v1.CrawlChaptersResponse": {
+            "type": "object"
+        },
+        "v1.crawlStoryRequest": {
+            "type": "object",
+            "required": [
+                "url"
+            ],
+            "properties": {
+                "url": {
+                    "type": "string",
+                    "example": "https://truyenfull.vn/tu-cam-270192"
+                }
+            }
+        },
+        "v1.crawlStoryResponse": {
+            "type": "object",
+            "properties": {
+                "story": {
+                    "$ref": "#/definitions/entity.Story"
                 }
             }
         },
@@ -173,7 +456,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
+	Host:             "localhost:8000",
 	BasePath:         "/v1",
 	Schemes:          []string{},
 	Title:            "Go Clean Template API",

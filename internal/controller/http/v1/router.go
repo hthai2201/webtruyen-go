@@ -20,7 +20,7 @@ import (
 // @title       Go Clean Template API
 // @description Using a translation service as an example
 // @version     1.0
-// @host        localhost:8080
+// @host        localhost:8000
 // @BasePath    /v1
 func NewRouter(handler *gin.Engine, l logger.Interface, t *usecases.Usecases) {
 
