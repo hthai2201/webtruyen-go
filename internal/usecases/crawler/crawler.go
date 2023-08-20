@@ -83,6 +83,7 @@ func (uc *CrawlerUseCase) CrawlStory(ctx context.Context, url string) (entity.St
 	c.Visit(url)
 	wg.Wait()
 	uc.repo.StoreStory(ctx, &resultStory)
+	defer uc.CrawlChapters(ctx, url)
 	return resultStory, nil
 }
 func (uc *CrawlerUseCase) CrawlChapters(ctx context.Context, url string) ([]entity.Chapter, error) {
