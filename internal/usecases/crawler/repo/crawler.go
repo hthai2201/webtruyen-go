@@ -71,12 +71,20 @@ func (r *CrawlerRepo) StoreStoryRate(ctx context.Context, t *entity.StoryRate) e
 }
 func (r *CrawlerRepo) StoreChapter(ctx context.Context, t *entity.Chapter) error {
 	db := r.appCtx.GetDBConnection()
-	result := db.Table(entity.Chapter{}.TableName()).Clauses(clause.OnConflict{
-		UpdateAll: true,
-	}).Create(t)
+	result := db.Table(entity.Chapter{}.TableName()).Create(t)
 
 	if result.Error != nil {
 		return fmt.Errorf("CrawlerRepo - StoreChapter - r.Pool.Exec: %w", result.Error)
+	}
+
+	return nil
+}
+func (r *CrawlerRepo) StoreChapters(ctx context.Context, t *[]entity.Chapter) error {
+	db := r.appCtx.GetDBConnection()
+	result := db.Table(entity.Chapter{}.TableName()).Create(t)
+
+	if result.Error != nil {
+		return fmt.Errorf("CrawlerRepo - StoreChapters - r.Pool.Exec: %w", result.Error)
 	}
 
 	return nil

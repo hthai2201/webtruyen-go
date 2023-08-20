@@ -22,6 +22,7 @@ type (
 		StoreStoryList(context.Context, *entity.StoryList) error
 		StoreCategory(context.Context, *entity.Category) error
 		StoreChapter(context.Context, *entity.Chapter) error
+		StoreChapters(context.Context, *[]entity.Chapter) error
 		StoreAuthor(context.Context, *entity.Author) error
 		FindStory(context.Context, entity.Story, *entity.Story) error
 	}

@@ -22,6 +22,7 @@ type Story struct {
 	Status      string     `json:"status" gorm:"column:status"`
 	Rate        StoryRate  `json:"rate" gorm:"foreignkey:story_id"`
 	Description string     `json:"description" gorm:"column:description"`
+	Chapters    []Chapter  `json:"chapters" gorm:"foreignkey:story_id"`
 }
 
 func (Story) TableName() string {
@@ -30,7 +31,6 @@ func (Story) TableName() string {
 
 func (e *Story) BeforeCreate(tx *gorm.DB) (err error) {
 	tx.Statement.AddClause(clause.OnConflict{
-		Columns:   []clause.Column{{Name: "slug"}, {Name: "tid"}},
 		UpdateAll: true,
 	})
 	return nil

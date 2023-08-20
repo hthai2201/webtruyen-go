@@ -75,6 +75,6 @@ func (r *crawlerRoutes) crawlChapters(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"total":           len(chapters),
-		"newest_chapters": chapters[:10],
+		"newest_chapters": chapters,
 	})
 }

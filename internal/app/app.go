@@ -34,7 +34,10 @@ func Run(cfg *config.Config) {
 	if err != nil {
 		l.Fatal(fmt.Errorf("app - Run - postgres.New: %w", err))
 	}
-	db.AutoMigrate(&entity.Author{}, &entity.Category{}, &entity.Chapter{}, &entity.Story{}, &entity.StoryList{}, &entity.StoryRate{}, &entity.Translation{})
+	db.AutoMigrate(&entity.Author{},
+		&entity.Category{}, &entity.StoryList{},
+		&entity.Story{}, &entity.Chapter{},
+		&entity.StoryRate{}, &entity.Translation{})
 
 	defer func() {
 		dbInstance, _ := db.DB()
