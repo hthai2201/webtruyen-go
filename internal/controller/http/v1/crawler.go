@@ -118,7 +118,7 @@ type CrawlChapterResponse struct {
 }
 
 // @Summary     Crawl Chapter
-// @Description Crawl chapters from a URL
+// @Description Crawl chapter from a URL
 // @ID          crawl-chapter
 // @Tags        crawler
 // @Accept      json
