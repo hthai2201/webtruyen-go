@@ -28,16 +28,16 @@ const docTemplate = `{
                 "tags": [
                     "crawler"
                 ],
-                "summary": "Crawl Chapters",
-                "operationId": "crawl-chapters",
+                "summary": "Crawl Chapter",
+                "operationId": "crawl-chapter",
                 "parameters": [
                     {
-                        "description": "Crawl chapters request",
+                        "description": "Crawl chapter request",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.CrawlChaptersRequest"
+                            "$ref": "#/definitions/v1.CrawlChapterRequest"
                         }
                     }
                 ],
@@ -45,7 +45,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/v1.CrawlChaptersResponse"
+                            "$ref": "#/definitions/v1.CrawlChapterResponse"
                         }
                     },
                     "400": {
@@ -129,6 +129,42 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/v1.getStoriesResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    }
+                }
+            }
+        },
+        "/stories/{sSlug}/chapters/{cSlug}": {
+            "get": {
+                "description": "Get Chapter Details by Slug",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "story"
+                ],
+                "summary": "Get Chapter Details",
+                "operationId": "get-chapter-by-slug",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.getChapterBySlugResponse"
                         }
                     },
                     "400": {
@@ -459,6 +495,26 @@ const docTemplate = `{
                 }
             }
         },
+        "v1.CrawlChapterRequest": {
+            "type": "object",
+            "required": [
+                "url"
+            ],
+            "properties": {
+                "url": {
+                    "type": "string",
+                    "example": "https://truyenfull.vn/tu-cam-270192"
+                }
+            }
+        },
+        "v1.CrawlChapterResponse": {
+            "type": "object",
+            "properties": {
+                "chapter": {
+                    "$ref": "#/definitions/entity.Chapter"
+                }
+            }
+        },
         "v1.CrawlChaptersRequest": {
             "type": "object",
             "required": [
@@ -513,6 +569,14 @@ const docTemplate = `{
                 "source": {
                     "type": "string",
                     "example": "auto"
+                }
+            }
+        },
+        "v1.getChapterBySlugResponse": {
+            "type": "object",
+            "properties": {
+                "chapter": {
+                    "$ref": "#/definitions/entity.Chapter"
                 }
             }
         },

@@ -22,6 +22,7 @@ func newCrawlerRoutes(handler *gin.RouterGroup, t crawlerusecase.Crawler, l logg
 	{
 		h.POST("/crawl-story", r.crawlStory)
 		h.POST("/crawl-chapters", r.crawlChapters)
+		h.POST("/crawl-chapter", r.crawlChapter)
 	}
 }
 
@@ -106,5 +107,47 @@ func (r *crawlerRoutes) crawlChapters(c *gin.Context) {
 	c.JSON(http.StatusOK, CrawlChaptersResponse{
 		total:           len(chapters),
 		newest_chapters: chapters,
+	})
+}
+
+type CrawlChapterRequest struct {
+	URL string `json:"url"       binding:"required"  example:"https://truyenfull.vn/tu-cam-270192"`
+}
+type CrawlChapterResponse struct {
+	Chapter entity.Chapter `json:"chapter"`
+}
+
+// @Summary     Crawl Chapter
+// @Description Crawl chapters from a URL
+// @ID          crawl-chapter
+// @Tags        crawler
+// @Accept      json
+// @Produce     json
+// @Param       request body CrawlChapterRequest true "Crawl chapter request"
+// @Success     200 {object} CrawlChapterResponse
+// @Failure     400 {object} response
+// @Failure     500 {object} response
+// @Router      /crawler/crawl-chapters [post]
+func (r *crawlerRoutes) crawlChapter(c *gin.Context) {
+	var request CrawlChapterRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
+		r.l.Error(err, "http - v1 - CrawlChapter")
+		errorResponse(c, http.StatusBadRequest, "invalid request body")
+
+		return
+	}
+
+	chapter, err := r.t.CrawlChapter(
+		c.Request.Context(), request.URL,
+	)
+	if err != nil {
+		r.l.Error(err, "http - v1 - CrawlChapters")
+		errorResponse(c, http.StatusInternalServerError, "crawler service problems")
+
+		return
+	}
+
+	c.JSON(http.StatusOK, CrawlChapterResponse{
+		Chapter: chapter,
 	})
 }

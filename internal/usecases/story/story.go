@@ -48,3 +48,27 @@ func (uc *StoryUseCase) FindStories(ctx context.Context, f entity.Story, p *comm
 	}
 	return resultStories, nil
 }
+
+func (uc *StoryUseCase) FindStoryChapter(ctx context.Context, sSlug string, cSlug string) (entity.Chapter, error) {
+	var chapter entity.Chapter
+	story := entity.Story{
+		Slug: sSlug,
+	}
+	err := uc.repo.FindStory(ctx, story, &story)
+	if err != nil {
+		story, err = uc.crawler.CrawlStoryBySlug(ctx, sSlug)
+		if err != nil {
+			return chapter, fmt.Errorf("StoryUseCase - FindStoryChapter - s.repo.CrawlStoryBySlug: %w", err)
+		}
+
+	}
+	err = uc.repo.FindStoryChapter(ctx, story.ID, cSlug, &chapter)
+	if err != nil {
+		chapter, err = uc.crawler.CrawlChapterBySlug(ctx, sSlug, cSlug)
+		if err != nil {
+
+			return chapter, fmt.Errorf("StoryUseCase - CrawlChapterBySlug: %w", err)
+		}
+	}
+	return chapter, nil
+}

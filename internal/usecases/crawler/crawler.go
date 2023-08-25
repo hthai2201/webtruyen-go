@@ -31,10 +31,6 @@ func New(r CrawlerRepo, w TruyenFullWebAPI) *CrawlerUseCase {
 	}
 }
 
-func (uc *CrawlerUseCase) CrawlStoryBySlug(ctx context.Context, slug string) (entity.Story, error) {
-	return uc.CrawlStory(ctx, uc.webAPI.GetStoryURLBySlug(slug))
-
-}
 func (uc *CrawlerUseCase) CrawlStory(ctx context.Context, url string) (entity.Story, error) {
 	resultStory := entity.Story{}
 	// slug
@@ -119,7 +115,35 @@ func (uc *CrawlerUseCase) CrawlChapters(ctx context.Context, url string) ([]enti
 	}
 	return chapters, nil
 }
+func (uc *CrawlerUseCase) CrawlChapter(ctx context.Context, url string) (entity.Chapter, error) {
+	var newChapter entity.Chapter
+	story := entity.Story{
+		Slug: uc.webAPI.ExtractStorySlug(url),
+	}
+	err := uc.repo.FindStory(ctx, story, &story)
+	if err != nil {
+		story, err = uc.CrawlStory(ctx, url)
+		if err != nil {
+			return newChapter, fmt.Errorf("CrawlerUseCase - CrawlChapters - s.repo.FindStory: %w", err)
 
+		}
+	}
+	newChapter, url, err = parseChapter(url, story.ID)
+	if err != nil {
+		fmt.Printf("Error visiting %s: %s\n", url, err)
+		return newChapter, err
+	}
+	uc.repo.StoreChapter(ctx, &newChapter)
+	return newChapter, nil
+}
+func (uc *CrawlerUseCase) CrawlStoryBySlug(ctx context.Context, slug string) (entity.Story, error) {
+	return uc.CrawlStory(ctx, uc.webAPI.GetStoryURLBySlug(slug))
+
+}
+func (uc *CrawlerUseCase) CrawlChapterBySlug(ctx context.Context, sSlug string, cSlug string) (entity.Chapter, error) {
+	return uc.CrawlChapter(ctx, uc.webAPI.GetChapterURLBySlug(sSlug, cSlug))
+
+}
 func parseChapter(url string, storyId int) (entity.Chapter, string, error) {
 	newChapter := entity.Chapter{
 		StoryID: storyId,

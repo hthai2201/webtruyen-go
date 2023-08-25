@@ -46,3 +46,14 @@ func (r *StoryRepo) FindStories(ctx context.Context, f entity.Story, p *common.P
 
 	return nil
 }
+func (r *StoryRepo) FindStoryChapter(ctx context.Context, storyID int, slug string, c *entity.Chapter) error {
+	db := r.appCtx.GetDBConnection()
+	result := db.Table(entity.Chapter{}.TableName()).
+		Where("story_id = ?", storyID).
+		Where("slug =?", slug).First(c)
+	if result.Error != nil {
+		return fmt.Errorf("StoryRepo - FindStories - r.Pool.Exec: %w", result.Error)
+	}
+
+	return nil
+}

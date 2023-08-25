@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"github.com/hthai2201/webtruyen-go/internal/entity"
 )
@@ -59,4 +60,14 @@ func (t *TruyenFullWebAPI) GetStoryChapters(story entity.Story, opt map[string]s
 
 func (t *TruyenFullWebAPI) GetStoryURLBySlug(slug string) string {
 	return t.BaseURL + "/" + slug
+}
+func (t *TruyenFullWebAPI) GetChapterURLBySlug(sSlug string, cSlug string) string {
+	return t.BaseURL + "/" + sSlug + "/" + cSlug
+}
+func (t *TruyenFullWebAPI) ExtractStorySlug(url string) string {
+	parts := strings.Split(url, "/")
+	if len(parts) < 2 {
+		return ""
+	}
+	return parts[1]
 }

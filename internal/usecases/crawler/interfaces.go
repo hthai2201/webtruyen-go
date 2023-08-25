@@ -14,6 +14,8 @@ type (
 		CrawlStory(ctx context.Context, url string) (entity.Story, error)
 		CrawlStoryBySlug(ctx context.Context, slug string) (entity.Story, error)
 		CrawlChapters(ctx context.Context, url string) ([]entity.Chapter, error)
+		CrawlChapter(ctx context.Context, url string) (entity.Chapter, error)
+		CrawlChapterBySlug(ctx context.Context, sSlug string, cSlug string) (entity.Chapter, error)
 	}
 
 	// CrawlerRepo -.
@@ -30,5 +32,7 @@ type (
 	TruyenFullWebAPI interface {
 		GetStoryChapters(story entity.Story, opt map[string]string) (truyenfullwebapi.GetStoryChaptersResponse, error)
 		GetStoryURLBySlug(slug string) string
+		GetChapterURLBySlug(sSlug string, cSlug string) string
+		ExtractStorySlug(url string) string
 	}
 )

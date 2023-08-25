@@ -131,6 +131,19 @@ definitions:
       updated_at:
         type: string
     type: object
+  v1.CrawlChapterRequest:
+    properties:
+      url:
+        example: https://truyenfull.vn/tu-cam-270192
+        type: string
+    required:
+    - url
+    type: object
+  v1.CrawlChapterResponse:
+    properties:
+      chapter:
+        $ref: '#/definitions/entity.Chapter'
+    type: object
   v1.CrawlChaptersRequest:
     properties:
       url:
@@ -169,6 +182,11 @@ definitions:
     - destination
     - original
     - source
+    type: object
+  v1.getChapterBySlugResponse:
+    properties:
+      chapter:
+        $ref: '#/definitions/entity.Chapter'
     type: object
   v1.getStoriesResponse:
     properties:
@@ -209,21 +227,21 @@ paths:
       consumes:
       - application/json
       description: Crawl chapters from a URL
-      operationId: crawl-chapters
+      operationId: crawl-chapter
       parameters:
-      - description: Crawl chapters request
+      - description: Crawl chapter request
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/v1.CrawlChaptersRequest'
+          $ref: '#/definitions/v1.CrawlChapterRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/v1.CrawlChaptersResponse'
+            $ref: '#/definitions/v1.CrawlChapterResponse'
         "400":
           description: Bad Request
           schema:
@@ -232,7 +250,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/v1.response'
-      summary: Crawl Chapters
+      summary: Crawl Chapter
       tags:
       - crawler
   /crawler/crawl-story:
@@ -288,6 +306,30 @@ paths:
           schema:
             $ref: '#/definitions/v1.response'
       summary: Get Stories
+      tags:
+      - story
+  /stories/{sSlug}/chapters/{cSlug}:
+    get:
+      consumes:
+      - application/json
+      description: Get Chapter Details by Slug
+      operationId: get-chapter-by-slug
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.getChapterBySlugResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Get Chapter Details
       tags:
       - story
   /stories/{slug}:

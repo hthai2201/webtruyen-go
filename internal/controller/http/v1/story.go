@@ -24,7 +24,11 @@ func newStoryRoutes(handler *gin.RouterGroup, t storyusecase.Story, l logger.Int
 	h := handler.Group("/stories")
 	{
 		h.POST("/", r.getStories)
-		h.GET("/:slug", r.getStoryBySlug)
+
+		story := h.Group("/:sSlug")
+		storyChapters := story.Group("/chapters")
+		storyChapters.GET("/:cSlug", r.getChapterBySlug)
+		story.GET("/", r.getStoryBySlug)
 	}
 }
 
@@ -81,9 +85,9 @@ type getStoryBySlugResponse struct {
 // @Failure     500 {object} response
 // @Router      /stories/{slug} [post]
 func (r *storyRoutes) getStoryBySlug(c *gin.Context) {
-	var slug = c.Param("slug")
+	var slug = c.Param("sSlug")
 	if slug == "" {
-		r.l.Error(errors.New("Invalid Slug"), "http - v1 - crawlStory")
+		r.l.Error(errors.New("Invalid Slug"), "http - v1 - getStoryBySlug")
 		errorResponse(c, http.StatusBadRequest, "invalid request body")
 
 		return
@@ -100,4 +104,46 @@ func (r *storyRoutes) getStoryBySlug(c *gin.Context) {
 	}
 	fmt.Println(story)
 	c.JSON(http.StatusOK, getStoryBySlugResponse{Story: story})
+}
+
+type getChapterBySlugResponse struct {
+	Chapter entity.Chapter `json:"chapter"`
+}
+
+// @Summary     Get Chapter Details
+// @Description Get Chapter Details by Slug
+// @ID          get-chapter-by-slug
+// @Tags        story
+// @Accept      json
+// @Produce     json
+// @Success     200 {object} getChapterBySlugResponse
+// @Failure     400 {object} response
+// @Failure     500 {object} response
+// @Router      /stories/{sSlug}/chapters/{cSlug} [get]
+func (r *storyRoutes) getChapterBySlug(c *gin.Context) {
+	var sSlug = c.Param("sSlug")
+	if sSlug == "" {
+		r.l.Error(errors.New("Invalid Story Slug"), "http - v1 - getChapterBySlug")
+		errorResponse(c, http.StatusBadRequest, "invalid request body")
+
+		return
+	}
+	cSlug := c.Param("cSlug")
+	if cSlug == "" {
+		r.l.Error(errors.New("Invalid Chapter Slug"), "http - v1 - getChapterBySlug")
+		errorResponse(c, http.StatusBadRequest, "invalid request body")
+
+		return
+	}
+
+	chapter, err := r.t.FindStoryChapter(
+		c.Request.Context(), sSlug, cSlug,
+	)
+	if err != nil {
+		r.l.Error(err, "http - v1 - getStoryBySlug")
+		errorResponse(c, http.StatusInternalServerError, "story service problems")
+
+		return
+	}
+	c.JSON(http.StatusOK, getChapterBySlugResponse{Chapter: chapter})
 }
