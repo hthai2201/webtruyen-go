@@ -119,7 +119,7 @@ type CrawlChapterResponse struct {
 
 // @Summary     Crawl Chapter
 // @Description Crawl chapter from a URL
-// @ID          crawl-chapter
+// @ID          crawl-chapter-details
 // @Tags        crawler
 // @Accept      json
 // @Produce     json
@@ -127,7 +127,7 @@ type CrawlChapterResponse struct {
 // @Success     200 {object} CrawlChapterResponse
 // @Failure     400 {object} response
 // @Failure     500 {object} response
-// @Router      /crawler/crawl-chapters [post]
+// @Router      /crawler/crawl-chapter [post]
 func (r *crawlerRoutes) crawlChapter(c *gin.Context) {
 	var request CrawlChapterRequest
 	if err := c.ShouldBindJSON(&request); err != nil {

@@ -16,9 +16,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/crawler/crawl-chapters": {
+        "/crawler/crawl-chapter": {
             "post": {
-                "description": "Crawl chapters from a URL",
+                "description": "Crawl chapter from a URL",
                 "consumes": [
                     "application/json"
                 ],
@@ -29,7 +29,7 @@ const docTemplate = `{
                     "crawler"
                 ],
                 "summary": "Crawl Chapter",
-                "operationId": "crawl-chapter",
+                "operationId": "crawl-chapter-details",
                 "parameters": [
                     {
                         "description": "Crawl chapter request",
@@ -46,6 +46,53 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/v1.CrawlChapterResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    }
+                }
+            }
+        },
+        "/crawler/crawl-chapters": {
+            "post": {
+                "description": "Crawl chapters from a URL",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "crawler"
+                ],
+                "summary": "Crawl Chapters",
+                "operationId": "crawl-chapters",
+                "parameters": [
+                    {
+                        "description": "Crawl chapters request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.CrawlChaptersRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.CrawlChaptersResponse"
                         }
                     },
                     "400": {
@@ -146,6 +193,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/stories/{sSlug}": {
+            "get": {
+                "description": "Get Story Details by Slug",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "story"
+                ],
+                "summary": "Get Story Details",
+                "operationId": "get-story-by-slug",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.getStoryBySlugResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    }
+                }
+            }
+        },
         "/stories/{sSlug}/chapters/{cSlug}": {
             "get": {
                 "description": "Get Chapter Details by Slug",
@@ -165,42 +248,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/v1.getChapterBySlugResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/v1.response"
-                        }
-                    }
-                }
-            }
-        },
-        "/stories/{slug}": {
-            "post": {
-                "description": "Get Story Details by Slug",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "story"
-                ],
-                "summary": "Get Story Details",
-                "operationId": "get-story-by-slug",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/v1.getStoryBySlugResponse"
                         }
                     },
                     "400": {

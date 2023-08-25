@@ -222,12 +222,12 @@ info:
   title: Go Clean Template API
   version: "1.0"
 paths:
-  /crawler/crawl-chapters:
+  /crawler/crawl-chapter:
     post:
       consumes:
       - application/json
-      description: Crawl chapters from a URL
-      operationId: crawl-chapter
+      description: Crawl chapter from a URL
+      operationId: crawl-chapter-details
       parameters:
       - description: Crawl chapter request
         in: body
@@ -251,6 +251,37 @@ paths:
           schema:
             $ref: '#/definitions/v1.response'
       summary: Crawl Chapter
+      tags:
+      - crawler
+  /crawler/crawl-chapters:
+    post:
+      consumes:
+      - application/json
+      description: Crawl chapters from a URL
+      operationId: crawl-chapters
+      parameters:
+      - description: Crawl chapters request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/v1.CrawlChaptersRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.CrawlChaptersResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Crawl Chapters
       tags:
       - crawler
   /crawler/crawl-story:
@@ -308,6 +339,30 @@ paths:
       summary: Get Stories
       tags:
       - story
+  /stories/{sSlug}:
+    get:
+      consumes:
+      - application/json
+      description: Get Story Details by Slug
+      operationId: get-story-by-slug
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.getStoryBySlugResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Get Story Details
+      tags:
+      - story
   /stories/{sSlug}/chapters/{cSlug}:
     get:
       consumes:
@@ -330,30 +385,6 @@ paths:
           schema:
             $ref: '#/definitions/v1.response'
       summary: Get Chapter Details
-      tags:
-      - story
-  /stories/{slug}:
-    post:
-      consumes:
-      - application/json
-      description: Get Story Details by Slug
-      operationId: get-story-by-slug
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/v1.getStoryBySlugResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/v1.response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/v1.response'
-      summary: Get Story Details
       tags:
       - story
   /translation/do-translate:

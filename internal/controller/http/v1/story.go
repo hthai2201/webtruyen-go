@@ -83,7 +83,7 @@ type getStoryBySlugResponse struct {
 // @Success     200 {object} getStoryBySlugResponse
 // @Failure     400 {object} response
 // @Failure     500 {object} response
-// @Router      /stories/{slug} [post]
+// @Router      /stories/{sSlug} [get]
 func (r *storyRoutes) getStoryBySlug(c *gin.Context) {
 	var slug = c.Param("sSlug")
 	if slug == "" {
