@@ -6,6 +6,7 @@ import (
 
 	"github.com/hthai2201/webtruyen-go/internal/entity"
 	"github.com/hthai2201/webtruyen-go/pkg/appctx"
+	"github.com/hthai2201/webtruyen-go/pkg/common"
 )
 
 const _defaultEntityCap = 64
@@ -26,6 +27,22 @@ func (r *StoryRepo) FindStory(ctx context.Context, f entity.Story, t *entity.Sto
 	if result.Error != nil {
 		return fmt.Errorf("StoryRepo - FindStory - r.Pool.Exec: %w", result.Error)
 	}
+
+	return nil
+}
+func (r *StoryRepo) FindStories(ctx context.Context, f entity.Story, p *common.Pagination, t *[]entity.Story) error {
+	db := r.appCtx.GetDBConnection()
+	p.Fulfill()
+	result := db.Table(entity.Story{}.TableName()).
+		Where(f).
+		Offset((p.Page - 1) * p.Limit).
+		Limit(p.Limit).
+		Find(t)
+	if result.Error != nil {
+		return fmt.Errorf("StoryRepo - FindStories - r.Pool.Exec: %w", result.Error)
+	}
+	db.Table(entity.Story{}.TableName()).
+		Where(f).Count(&p.Total)
 
 	return nil
 }

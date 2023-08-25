@@ -9,6 +9,7 @@ import (
 
 	"github.com/hthai2201/webtruyen-go/internal/entity"
 	storyusecase "github.com/hthai2201/webtruyen-go/internal/usecases/story"
+	"github.com/hthai2201/webtruyen-go/pkg/common"
 	"github.com/hthai2201/webtruyen-go/pkg/logger"
 )
 
@@ -22,13 +23,49 @@ func newStoryRoutes(handler *gin.RouterGroup, t storyusecase.Story, l logger.Int
 
 	h := handler.Group("/stories")
 	{
+		h.POST("/", r.getStories)
 		h.GET("/:slug", r.getStoryBySlug)
 	}
 }
 
-type getStoryBySlugRequest struct {
-	Slug string `url:"slug" binding:"required"  example:"tu-cam-270192"`
+type getStoriesRequest struct {
+	Filters    entity.Story      `json:"filters,omitempty"`
+	Pagination common.Pagination `json:"pagination,omitempty"`
 }
+
+type getStoriesResponse struct {
+	Stories    []entity.Story    `json:"stories"`
+	Pagination common.Pagination `json:"pagination"`
+}
+
+// @Summary     Get Stories
+// @Description Get all stories
+// @ID          get-stories
+// @Tags        story
+// @Accept      json
+// @Produce     json
+// @Success     200 {object} getStoriesResponse
+// @Failure     400 {object} response
+// @Failure     500 {object} response
+// @Router      /stories [post]
+func (r *storyRoutes) getStories(c *gin.Context) {
+	var request getStoriesRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
+		r.l.Error(err, "http - v1 - crawlStory")
+		errorResponse(c, http.StatusBadRequest, "invalid request body")
+
+		return
+	}
+	stories, err := r.t.FindStories(c.Request.Context(), request.Filters, &request.Pagination)
+	if err != nil {
+		r.l.Error(err, "http - v1 - getStories")
+		errorResponse(c, http.StatusInternalServerError, "story service problems")
+
+		return
+	}
+	c.JSON(http.StatusOK, getStoriesResponse{Stories: stories, Pagination: request.Pagination})
+}
+
 type getStoryBySlugResponse struct {
 	Story entity.Story `json:"story"`
 }

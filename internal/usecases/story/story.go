@@ -6,6 +6,7 @@ import (
 
 	"github.com/hthai2201/webtruyen-go/internal/entity"
 	crawlerusecase "github.com/hthai2201/webtruyen-go/internal/usecases/crawler"
+	"github.com/hthai2201/webtruyen-go/pkg/common"
 )
 
 // StoryUseCase -.
@@ -37,4 +38,13 @@ func (uc *StoryUseCase) FindStory(ctx context.Context, slug string) (entity.Stor
 
 	fmt.Println(story)
 	return story, nil
+}
+func (uc *StoryUseCase) FindStories(ctx context.Context, f entity.Story, p *common.Pagination) ([]entity.Story, error) {
+	var resultStories []entity.Story
+	err := uc.repo.FindStories(ctx, f, p, &resultStories)
+	if err != nil {
+		return resultStories, fmt.Errorf("StoryUseCase - FindStories - s.repo.FindStories: %w", err)
+
+	}
+	return resultStories, nil
 }

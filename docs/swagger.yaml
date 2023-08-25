@@ -1,5 +1,14 @@
 basePath: /v1
 definitions:
+  common.Pagination:
+    properties:
+      limit:
+        type: integer
+      page:
+        type: integer
+      total:
+        type: integer
+    type: object
   entity.Author:
     properties:
       created_at:
@@ -161,6 +170,15 @@ definitions:
     - original
     - source
     type: object
+  v1.getStoriesResponse:
+    properties:
+      pagination:
+        $ref: '#/definitions/common.Pagination'
+      stories:
+        items:
+          $ref: '#/definitions/entity.Story'
+        type: array
+    type: object
   v1.getStoryBySlugResponse:
     properties:
       story:
@@ -248,6 +266,30 @@ paths:
       summary: Crawl Story
       tags:
       - crawler
+  /stories:
+    post:
+      consumes:
+      - application/json
+      description: Get all stories
+      operationId: get-stories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.getStoriesResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Get Stories
+      tags:
+      - story
   /stories/{slug}:
     post:
       consumes:

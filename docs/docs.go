@@ -110,6 +110,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/stories": {
+            "post": {
+                "description": "Get all stories",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "story"
+                ],
+                "summary": "Get Stories",
+                "operationId": "get-stories",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.getStoriesResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    }
+                }
+            }
+        },
         "/stories/{slug}": {
             "post": {
                 "description": "Get Story Details by Slug",
@@ -225,6 +261,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "common.Pagination": {
+            "type": "object",
+            "properties": {
+                "limit": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "entity.Author": {
             "type": "object",
             "properties": {
@@ -463,6 +513,20 @@ const docTemplate = `{
                 "source": {
                     "type": "string",
                     "example": "auto"
+                }
+            }
+        },
+        "v1.getStoriesResponse": {
+            "type": "object",
+            "properties": {
+                "pagination": {
+                    "$ref": "#/definitions/common.Pagination"
+                },
+                "stories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Story"
+                    }
                 }
             }
         },
