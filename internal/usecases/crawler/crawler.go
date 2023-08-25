@@ -31,6 +31,10 @@ func New(r CrawlerRepo, w TruyenFullWebAPI) *CrawlerUseCase {
 	}
 }
 
+func (uc *CrawlerUseCase) CrawlStoryBySlug(ctx context.Context, slug string) (entity.Story, error) {
+	return uc.CrawlStory(ctx, uc.webAPI.GetStoryURLBySlug(slug))
+
+}
 func (uc *CrawlerUseCase) CrawlStory(ctx context.Context, url string) (entity.Story, error) {
 	resultStory := entity.Story{}
 	// slug
@@ -83,7 +87,7 @@ func (uc *CrawlerUseCase) CrawlStory(ctx context.Context, url string) (entity.St
 	c.Visit(url)
 	wg.Wait()
 	uc.repo.StoreStory(ctx, &resultStory)
-	defer uc.CrawlChapters(ctx, url)
+	go uc.CrawlChapters(ctx, url)
 	return resultStory, nil
 }
 func (uc *CrawlerUseCase) CrawlChapters(ctx context.Context, url string) ([]entity.Chapter, error) {

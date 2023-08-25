@@ -110,6 +110,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/stories/{slug}": {
+            "post": {
+                "description": "Get Story Details by Slug",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "story"
+                ],
+                "summary": "Get Story Details",
+                "operationId": "get-story-by-slug",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.getStoryBySlugResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.response"
+                        }
+                    }
+                }
+            }
+        },
         "/translation/do-translate": {
             "post": {
                 "description": "Translate a text",
@@ -427,6 +463,14 @@ const docTemplate = `{
                 "source": {
                     "type": "string",
                     "example": "auto"
+                }
+            }
+        },
+        "v1.getStoryBySlugResponse": {
+            "type": "object",
+            "properties": {
+                "story": {
+                    "$ref": "#/definitions/entity.Story"
                 }
             }
         },

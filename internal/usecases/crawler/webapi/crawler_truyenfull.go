@@ -11,12 +11,15 @@ import (
 
 // TruyenFullWebAPI -.
 type TruyenFullWebAPI struct {
+	BaseURL string
 }
 
 // New -.
 func New() *TruyenFullWebAPI {
 
-	return &TruyenFullWebAPI{}
+	return &TruyenFullWebAPI{
+		BaseURL: "https://truyenfull.vn",
+	}
 }
 
 type GetStoryChaptersRequest struct {
@@ -52,4 +55,8 @@ func (t *TruyenFullWebAPI) GetStoryChapters(story entity.Story, opt map[string]s
 	err = json.Unmarshal(body, &response)
 
 	return response, nil
+}
+
+func (t *TruyenFullWebAPI) GetStoryURLBySlug(slug string) string {
+	return t.BaseURL + "/" + slug
 }

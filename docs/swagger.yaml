@@ -161,6 +161,11 @@ definitions:
     - original
     - source
     type: object
+  v1.getStoryBySlugResponse:
+    properties:
+      story:
+        $ref: '#/definitions/entity.Story'
+    type: object
   v1.historyResponse:
     properties:
       history:
@@ -243,6 +248,30 @@ paths:
       summary: Crawl Story
       tags:
       - crawler
+  /stories/{slug}:
+    post:
+      consumes:
+      - application/json
+      description: Get Story Details by Slug
+      operationId: get-story-by-slug
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.getStoryBySlugResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Get Story Details
+      tags:
+      - story
   /translation/do-translate:
     post:
       consumes:
