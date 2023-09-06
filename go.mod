@@ -3,7 +3,7 @@ module github.com/hthai2201/webtruyen-go
 go 1.20
 
 require (
-	github.com/Conight/go-googletrans v0.2.3
+	github.com/Conight/go-googletrans v0.2.4
 	github.com/Eun/go-hit v0.5.23
 	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/gin-gonic/gin v1.9.1
